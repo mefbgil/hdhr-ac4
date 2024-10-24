@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "ATSC 3.0 programs with AC3 audio",
   "main": "index.js",
-  "repository": "git@github.com:whichken/hdhr-ac4.git",
+  "repository": "git@github.com:mefbgil/hdhr-ac4.git",
   "license": "Apache-2.0",
   "private": false,
   "dependencies": {
