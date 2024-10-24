@@ -17,7 +17,7 @@ if (!process.env.FFMPEG_ARGS) {
 const app = express();
 const media = express();
 const hdhr = process.env.HDHR_IP;
-const ffmpegArgs = process.env.FFMPEG_ARGS.split(',');
+const ffmpegArgs = process.env.FFMPEG_ARGS;
 
 let deviceId = "00ABCDEF";
 
@@ -83,7 +83,7 @@ media.use("/auto/:channel", async (req, res, next) => {
     });
 
     if (stream.status === 200) {
-      const ffmpeg = spawn("/usr/bin/ffmpeg", ffmpegArgs);
+      const ffmpeg = spawn("/usr/bin/ffmpeg", [ffmpegArgs], { shell: true });
 
       stream.data.pipe(ffmpeg.stdin);
       ffmpeg.stdout.pipe(res);
