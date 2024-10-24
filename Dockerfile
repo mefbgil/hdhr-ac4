@@ -1,30 +1,27 @@
-FROM node:20 AS ffmpeg
+version: '3.8'
 
-WORKDIR /home
-
-RUN apt-get install -y binutils xz-utils
-RUN curl -L -o emby.deb https://github.com/MediaBrowser/Emby.Releases/releases/download/4.7.13.0/emby-server-deb_4.7.13.0_amd64.deb
-RUN ar x emby.deb data.tar.xz && \
-    tar xf data.tar.xz
-
-# Set up the app and copy over ffmpeg
-FROM node:20
-
-WORKDIR /home
-COPY package.json ./
-RUN yarn install --production
-COPY *.js ./
-
-COPY --from=ffmpeg /home/opt/emby-server/bin/ffmpeg /usr/bin/ffmpeg
-COPY --from=ffmpeg /home/opt/emby-server/lib/libav*.so.* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/lib/libpostproc.so.* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/lib/libsw* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/extra/lib/libva*.so.* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/extra/lib/libdrm.so.* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/extra/lib/libmfx.so.* /usr/lib/
-COPY --from=ffmpeg /home/opt/emby-server/extra/lib/libOpenCL.so.* /usr/lib/
-
-EXPOSE 80
-EXPOSE 5004
-
-CMD ["node", "index.js"]
+services:
+  hdhr-ac4:
+    image: hdhr:latest
+    ports:
+      - "80:80"
+      - "5004:5004"
+    environment:
+      HDHR_IP: "10.0.0.151"
+      HOST_IP: "10.0.0.20"
+      DEVICEID_SWAP: "1"
+      XDG_RUNTIME_DIR: "/tmp"
+    volumes:
+      - /data/mnt/docker/hdhr-ac4/config:/config
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      - com.centurylinklabs.watchtower.monitor-only=true
+    entrypoint: [""]  # Clear the existing ENTRYPOINT
+    command: ["node", "index.js"]  # Run node index.js
+    networks:
+      mac_01:
+        ipv4_address: 10.0.0.20
+networks:
+  mac_01:
+    external: true
