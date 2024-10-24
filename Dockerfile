@@ -1,28 +1,25 @@
-version: '3.8'
+FROM linuxserver/ffmpeg
 
-services:
-  hdhr-ac4:
-    image: hdhr:latest
-    ports:
-      - "80:80"
-      - "5004:5004"
-    environment:
-      HDHR_IP: "10.0.0.151"
-      HOST_IP: "10.0.0.20"
-      DEVICEID_SWAP: "1"
-      XDG_RUNTIME_DIR: "/tmp"
-      FFMPEG_ARGS: "-nostats,-hide_banner,-loglevel,warning,-i,pipe:,-map,0:v,-map,0:a,-c:v,copy,-c:a,ac3,-f,mpegts,-"
-    volumes:
-      - /data/mnt/docker/hdhr-ac4/config:/config
-    devices:
-      - /dev/dri:/dev/dri
-    labels:
-      - com.centurylinklabs.watchtower.monitor-only=true
-    entrypoint: [""]  # Clear the existing ENTRYPOINT
-    command: ["node", "index.js"]  # Run node index.js
-    networks:
-      mac_01:
-        ipv4_address: 10.0.0.20
-networks:
-  mac_01:
-    external: true
+RUN apt update -y
+RUN apt upgrade -y
+
+RUN DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt install -yq --no-install-recommends sudo cron net-tools nano git vainfo ca-certificates expat libgomp1 libfontconfig gnupg
+
+EXPOSE 80
+EXPOSE 5004
+
+ENV NODE_MAJOR=20
+
+RUN sudo mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+RUN sudo apt update && sudo apt install nodejs -y
+
+RUN mkdir /git && cd /git && git clone https://github.com/whichken/hdhr-ac4.git
+
+RUN cd /git/hdhr-ac4 && \
+    npm cache clean --force && \
+    rm -rf node_modules package-lock.json && \
+    npm install
+
+CMD ["/bin/bash"]
