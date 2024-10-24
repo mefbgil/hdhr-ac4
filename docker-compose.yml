@@ -18,7 +18,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.monitor-only=true
     entrypoint: [""]  # Clear the existing ENTRYPOINT
-    working_dir: /config/git/hdhr-ac4
     command: ["node", "index.js"]  # Run node index.js
 
     networks:
