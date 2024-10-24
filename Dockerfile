@@ -22,4 +22,6 @@ RUN cd /git/hdhr-ac4 && \
     rm -rf node_modules package-lock.json && \
     npm install
 
+WORKDIR /git/hdhr-ac4
+
 CMD ["/bin/bash"]
