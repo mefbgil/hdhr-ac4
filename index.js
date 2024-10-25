@@ -81,7 +81,7 @@ media.use("/auto/:channel", async (req, res, next) => {
       cancelToken: cancelSource.token,
     })
     if (stream.status === 200) {
-      const ffmpeg = spawn("/usr/bin/ffmpeg", [
+      const ffmpeg = spawn("/usr/local/bin/ffmpeg", [
         "-nostats",
         "-hide_banner",
         "-loglevel",
