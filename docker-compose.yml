@@ -12,7 +12,7 @@ services:
       DEVICEID_SWAP: "1"
       XDG_RUNTIME_DIR: "/tmp"
 #      FFMPEG_ARGS: "-nostats -hide_banner -loglevel warning -i pipe: -map 0:v -map 0:a -c:v copy -c:a ac3 -f mpegts -"
-      FFMPEG_ARGS: "-nostats -hide_banner -loglevel warning -i pipe: -map 0:v -map 0:a -c:v h264_qsv -crf 23 -preset fast -c:a copy -f mpegts -"
+      FFMPEG_ARGS: "-nostats -hide_banner -loglevel warning -i pipe: -map 0:v -map 0:a -c:v hevc_qsv -crf 23 -preset fast -c:a copy -f mpegts -"
 #    volumes:
 #      - /data/mnt/docker/hdhr-ac4/config:/config
     devices:
