@@ -7,8 +7,8 @@ services:
       - "80:80"
       - "5004:5004"
     environment:
-      HDHR_IP: "10.0.0.151"
-      HOST_IP: "10.0.0.20"
+      HDHR_IP: "10.0.0.152"
+      HOST_IP: "10.0.0.151"
       DEVICEID_SWAP: "1"
       XDG_RUNTIME_DIR: "/tmp"
 #      FFMPEG_ARGS: "-nostats -hide_banner -loglevel warning -i pipe: -map 0:v -map 0:a -c:v copy -c:a ac3 -f mpegts -"
@@ -24,7 +24,7 @@ services:
 
     networks:
       mac_01:
-        ipv4_address: 10.0.0.20
+        ipv4_address: 10.0.0.151
 
 networks:
   mac_01:
